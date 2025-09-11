@@ -1,10 +1,11 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import Dashboard from './components/Dashboard';
 import AdminPanel from './components/AdminPanel';
 import LoginModal from './components/LoginModal';
 import { SALES_DATA, SELLER_SALES_DATA, ADMIN_PASSWORD } from './constants';
 import { type SalesData, type SellerSale, type MonthlySale } from './types';
-import { LockIcon, LogOutIcon, ArrowLeftIcon } from './components/icons';
+import { LockIcon, LogOutIcon, ArrowLeftIcon, PrinterIcon } from './components/icons';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,7 +27,7 @@ const App: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('sellerSalesData', JSON.stringify(sellerSalesData));
   }, [sellerSalesData]);
-
+  
   const salesData: SalesData = useMemo(() => {
     const monthlySalesMap = sellerSalesData.reduce<Record<string, number>>((acc, sale) => {
       acc[sale.month] = (acc[sale.month] || 0) + sale.value;
@@ -125,6 +126,18 @@ const App: React.FC = () => {
              {view === 'dashboard' && <p className="text-lg text-slate-400">Resumo de performance de Janeiro a Agosto.</p>}
            </div>
            <div className="flex items-center gap-4">
+            {view === 'dashboard' && (
+                <button
+                    id="print-dashboard-btn"
+                    type="button"
+                    onClick={() => window.print()}
+                    className="flex items-center gap-2 text-sm font-medium py-2 px-4 rounded-lg bg-slate-700 hover:bg-slate-600 transition-colors"
+                    aria-label="Imprimir Dashboard"
+                >
+                    <PrinterIcon className="w-4 h-4" />
+                    Imprimir
+                </button>
+            )}
             {renderHeaderControls()}
            </div>
         </header>

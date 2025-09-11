@@ -31,6 +31,85 @@
   }
 }
 </script>
+<style>
+  @media print {
+    @page {
+      size: A4 portrait;
+      margin: 1.5cm;
+    }
+
+    body, main {
+      background: white !important;
+      color: black !important;
+    }
+
+    header {
+      display: none !important;
+    }
+
+    /* Reset component styles for light background */
+    .bg-slate-800, .bg-slate-900, .bg-slate-900\/50 {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important; /* slate-200 */
+      box-shadow: none !important;
+    }
+
+    .border-slate-700, .border-b {
+      border-color: #e2e8f0 !important; /* slate-200 */
+    }
+    
+    /* Reset text colors */
+    .text-white, .text-gray-200, .text-slate-300, .text-slate-400,
+    .text-cyan-400, .text-yellow-400, .text-green-400, .text-amber-400,
+    p, h1, h2, span, div {
+      color: #000 !important;
+    }
+    
+    /* Make chart text readable */
+    .recharts-text, .recharts-cartesian-axis-tick-value tspan {
+      fill: #000 !important;
+    }
+
+    /* Use shades of gray for charts */
+    .recharts-bar .recharts-bar-rectangle path {
+        fill: #cccccc !important;
+    }
+    .recharts-pie-sector:nth-of-type(1) path {
+        fill: #a0aec0 !important; /* gray-500 equivalent */
+    }
+    .recharts-pie-sector:nth-of-type(2) path {
+        fill: #e2e8f0 !important; /* gray-300 equivalent */
+    }
+    
+    /* Prevent elements from breaking across pages */
+    .grid > div, .space-y-6 > div, .rounded-xl, table {
+        break-inside: avoid;
+    }
+
+    /* Simplify layout for printing */
+    .grid {
+        grid-template-columns: 1fr !important;
+    }
+    .lg\\:col-span-2 {
+        grid-column: span 1 / span 1 !important;
+    }
+    
+    /* Hide filters and other interactive elements */
+    .flex.justify-end.mb-4,
+    .flex.flex-col.sm\\:flex-row.gap-4.mb-4 {
+        display: none !important;
+    }
+    
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+    th, td {
+        border: 1px solid #ddd !important;
+        padding: 8px !important;
+    }
+  }
+</style>
 </head>
 <body>
     <div id="root"></div>
