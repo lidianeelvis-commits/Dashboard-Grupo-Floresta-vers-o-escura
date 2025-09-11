@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, LabelList } from 'recharts';
 import { type MonthlySale } from '../types';
 
 interface MonthlySalesChartProps {
@@ -17,6 +17,17 @@ const formatCurrencyShort = (value: number) => {
   }
   return `R$${value}`;
 };
+
+const formatValueShort = (value: number) => {
+  if (value >= 1_000_000) {
+    return `${(value / 1_000_000).toFixed(1)}M`;
+  }
+  if (value >= 1_000) {
+    return `${Math.round(value / 1_000)}k`;
+  }
+  return value;
+};
+
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -47,7 +58,7 @@ const MonthlySalesChart: React.FC<MonthlySalesChartProps> = ({ data, selectedMon
           <BarChart
             data={data}
             margin={{
-              top: 20,
+              top: 40,
               right: 10,
               left: 20,
               bottom: 5,
@@ -58,6 +69,7 @@ const MonthlySalesChart: React.FC<MonthlySalesChartProps> = ({ data, selectedMon
             <YAxis stroke="#94a3b8" tickFormatter={formatCurrencyShort} />
             <Tooltip content={<CustomTooltip />} cursor={{fill: 'rgba(71, 85, 105, 0.3)'}}/>
             <Bar dataKey="revenue" radius={[4, 4, 0, 0]}>
+              <LabelList dataKey="revenue" position="top" formatter={formatValueShort} fill="#94a3b8" fontSize={12} />
               {data.map((entry, index) => {
                 let color = DEFAULT_COLOR;
                 if (entry.month === selectedMonth) {
