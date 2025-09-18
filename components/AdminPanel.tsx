@@ -7,8 +7,9 @@ interface AdminPanelProps {
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ onAddSale, existingData }) => {
-  const initialFormState: Omit<SellerSale, 'value' | 'quantity'> & { value: string, quantity: string } = {
+  const initialFormState: Omit<SellerSale, 'value' | 'quantity' | 'day'> & { value: string, quantity: string, day: string } = {
     name: '',
+    day: '',
     month: 'Jan',
     storeType: 'ATACADO',
     quantity: '',
@@ -22,7 +23,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onAddSale, existingData }) => {
     return [...new Set(existingData.map(d => d.name))].sort();
   }, [existingData]);
   
-  const allMonths: Month[] = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Agos'];
+  const allMonths: Month[] = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Agos', 'Set', 'Out', 'Nov', 'Dez'];
   const allStoreTypes: StoreType[] = ['ATACADO', 'INDUSTRIA'];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -37,11 +38,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onAddSale, existingData }) => {
     e.preventDefault();
     const newSale: SellerSale = {
       ...formState,
+      day: parseInt(formState.day, 10),
       quantity: parseInt(formState.quantity, 10),
       value: parseFloat(formState.value),
     };
     
-    if (isNaN(newSale.quantity) || isNaN(newSale.value) || !newSale.name) {
+    if (isNaN(newSale.day) || isNaN(newSale.quantity) || isNaN(newSale.value) || !newSale.name) {
         setFeedbackMessage('Erro: Verifique se todos os campos estão preenchidos corretamente.');
         setTimeout(() => setFeedbackMessage(null), 3000);
         return;
@@ -72,7 +74,22 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onAddSale, existingData }) => {
           </select>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label htmlFor="day" className="block text-sm font-medium text-slate-400 mb-1">Dia</label>
+            <input
+              type="number"
+              id="day"
+              name="day"
+              min="1"
+              max="31"
+              value={formState.day}
+              onChange={handleChange}
+              required
+              className="w-full bg-slate-700 border border-slate-600 rounded-md py-2 px-3 text-white placeholder-slate-400 focus:ring-cyan-500 focus:border-cyan-500"
+              placeholder="Ex: 15"
+            />
+          </div>
           <div>
             <label htmlFor="month" className="block text-sm font-medium text-slate-400 mb-1">Mês</label>
             <select

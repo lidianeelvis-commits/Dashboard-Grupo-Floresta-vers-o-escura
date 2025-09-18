@@ -34,13 +34,14 @@ const App: React.FC = () => {
       return acc;
     }, {});
 
-    const monthlySales: MonthlySale[] = Object.entries(monthlySalesMap)
-      .map(([month, revenue]) => ({ month, revenue }))
-      // Ensure a consistent order, using the order from the original data
-      .sort((a, b) => SALES_DATA.monthlySales.findIndex(m => m.month === a.month) - SALES_DATA.monthlySales.findIndex(m => m.month === b.month));
+    // Use SALES_DATA.monthlySales as a template to ensure all months are present and ordered correctly.
+    const monthlySales: MonthlySale[] = SALES_DATA.monthlySales.map(templateMonth => ({
+        month: templateMonth.month,
+        revenue: monthlySalesMap[templateMonth.month] || 0
+    }));
       
     return {
-      monthlySales: monthlySales.length > 0 ? monthlySales : SALES_DATA.monthlySales,
+      monthlySales,
       goal: SALES_DATA.goal,
     };
   }, [sellerSalesData]);
@@ -123,7 +124,7 @@ const App: React.FC = () => {
         <header className="flex justify-between items-center mb-6">
            <div>
              <h1 className="text-3xl font-bold text-white">Dashboard de Vendas</h1>
-             {view === 'dashboard' && <p className="text-lg text-slate-400">Resumo de performance de Janeiro a Agosto.</p>}
+             {view === 'dashboard' && <p className="text-lg text-slate-400">Resumo de performance de Janeiro a Dezembro.</p>}
            </div>
            <div className="flex items-center gap-4">
             {view === 'dashboard' && (

@@ -11,10 +11,11 @@ export interface SalesData {
 
 export type StoreType = 'ATACADO' | 'INDUSTRIA';
 
-export type Month = 'Jan' | 'Fev' | 'Mar' | 'Abr' | 'Mai' | 'Jun' | 'Jul' | 'Agos';
+export type Month = 'Jan' | 'Fev' | 'Mar' | 'Abr' | 'Mai' | 'Jun' | 'Jul' | 'Agos' | 'Set' | 'Out' | 'Nov' | 'Dez';
 
 export interface SellerSale {
   name: string;
+  day: number;
   month: Month;
   storeType: StoreType;
   quantity: number;

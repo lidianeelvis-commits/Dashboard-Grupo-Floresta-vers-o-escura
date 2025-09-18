@@ -39,6 +39,7 @@ const SellerPerformance: React.FC<SellerPerformanceProps> = ({ data }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [monthFilter, setMonthFilter] = useState('All');
   const [storeFilter, setStoreFilter] = useState('All');
+  const [dayFilter, setDayFilter] = useState('');
   const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: 'ascending' | 'descending' } | null>({ key: 'value', direction: 'descending' });
 
   const months = useMemo(() => ['All', ...Array.from(new Set(data.map(item => item.month)))], [data]);
@@ -55,6 +56,13 @@ const SellerPerformance: React.FC<SellerPerformanceProps> = ({ data }) => {
       filteredData = filteredData.filter(item => item.storeType === storeFilter);
     }
     
+    if (dayFilter) {
+      const day = parseInt(dayFilter, 10);
+      if (!isNaN(day)) {
+        filteredData = filteredData.filter(item => item.day === day);
+      }
+    }
+
     if (searchTerm) {
       filteredData = filteredData.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
     }
@@ -83,7 +91,7 @@ const SellerPerformance: React.FC<SellerPerformanceProps> = ({ data }) => {
     }
 
     return sortableItems;
-  }, [data, searchTerm, monthFilter, storeFilter, sortConfig]);
+  }, [data, searchTerm, monthFilter, storeFilter, dayFilter, sortConfig]);
 
   const requestSort = (key: SortKey) => {
     let direction: 'ascending' | 'descending' = 'ascending';
@@ -136,6 +144,16 @@ const SellerPerformance: React.FC<SellerPerformanceProps> = ({ data }) => {
         >
           {storeTypes.map(store => <option key={store} value={store}>{store === 'All' ? 'Todas as Lojas' : `Loja ${store}`}</option>)}
         </select>
+        <input
+          type="number"
+          placeholder="Dia"
+          value={dayFilter}
+          onChange={(e) => setDayFilter(e.target.value)}
+          className="bg-slate-700 border border-slate-600 rounded-md py-2 px-4 text-white placeholder-slate-400 focus:ring-cyan-500 focus:border-cyan-500 sm:w-24"
+          aria-label="Filtrar por dia"
+          min="1"
+          max="31"
+        />
       </div>
 
       <div className="overflow-x-auto">
