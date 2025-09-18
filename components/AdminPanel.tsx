@@ -6,6 +6,21 @@ interface AdminPanelProps {
   existingData: SellerSale[];
 }
 
+const monthDisplayNames: { [key in Month]: string } = {
+  Jan: 'Janeiro',
+  Fev: 'Fevereiro',
+  Mar: 'Março',
+  Abr: 'Abril',
+  Mai: 'Maio',
+  Jun: 'Junho',
+  Jul: 'Julho',
+  Agos: 'Agosto',
+  Set: 'Setembro',
+  Out: 'Outubro',
+  Nov: 'Novembro',
+  Dez: 'Dezembro',
+};
+
 const AdminPanel: React.FC<AdminPanelProps> = ({ onAddSale, existingData }) => {
   const initialFormState: Omit<SellerSale, 'value' | 'quantity' | 'day'> & { value: string, quantity: string, day: string } = {
     name: '',
@@ -57,7 +72,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onAddSale, existingData }) => {
 
   return (
     <div className="bg-slate-800 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-700 max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold text-white mb-6">Adicionar Nova Venda</h2>
+      <h2 className="text-2xl font-bold text-white mb-6">Nova Venda</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-slate-400 mb-1">Vendedor</label>
@@ -100,7 +115,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onAddSale, existingData }) => {
               required
               className="w-full bg-slate-700 border border-slate-600 rounded-md py-2 px-3 text-white focus:ring-cyan-500 focus:border-cyan-500"
             >
-              {allMonths.map(m => <option key={m} value={m}>{m}</option>)}
+              {allMonths.map(m => <option key={m} value={m}>{monthDisplayNames[m]}</option>)}
             </select>
           </div>
           <div>
