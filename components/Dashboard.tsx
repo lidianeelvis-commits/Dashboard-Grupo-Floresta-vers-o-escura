@@ -1,7 +1,9 @@
+
 import React, { useState, useMemo } from 'react';
 import KpiCard from './KpiCard';
 import MonthlySalesChart from './MonthlySalesChart';
 import GoalProgressChart from './GoalProgressChart';
+import DailySalesChart from './DailySalesChart'; // Import the new component
 import { 
   DollarSignIcon, 
   TargetIcon, 
@@ -10,7 +12,8 @@ import {
   SearchIcon, 
   ArrowUpIcon, 
   ArrowDownIcon,
-  TrophyIcon
+  TrophyIcon,
+  CalendarDaysIcon, // Import the new icon
 } from './icons';
 import { type SellerSale, type SalesData, type Month } from '../types';
 
@@ -277,6 +280,25 @@ const Dashboard: React.FC<DashboardProps> = ({ salesData, sellerSalesData }) => 
     }
   }, [monthFilter, sellerSalesData]);
 
+  const dailySalesData = useMemo(() => {
+    if (monthFilter === 'All') {
+      return [];
+    }
+    const monthSales = sellerSalesData.filter(sale => sale.month === monthFilter);
+    const salesByDay = monthSales.reduce<Record<number, number>>((acc, sale) => {
+      acc[sale.day] = (acc[sale.day] || 0) + sale.value;
+      return acc;
+    }, {});
+
+    return Object.entries(salesByDay)
+      .map(([day, totalValue]) => ({
+        day: parseInt(day, 10),
+        totalValue,
+      }))
+      .sort((a, b) => a.day - b.day);
+  }, [monthFilter, sellerSalesData]);
+
+
   return (
     <div className="space-y-6">
       <div className="flex justify-end mb-4">
@@ -327,6 +349,20 @@ const Dashboard: React.FC<DashboardProps> = ({ salesData, sellerSalesData }) => 
             <h2 className="text-xl font-semibold text-white mb-4">Progresso da Meta</h2>
             <GoalProgressChart achieved={totalSales} remaining={remainingToGo} goal={goal} />
         </div>
+      </div>
+
+      <div className="bg-slate-800 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-700">
+        <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+            <CalendarDaysIcon className="w-6 h-6 text-slate-400" />
+            Desempenho Diário de Vendas {monthFilter !== 'All' && `(${monthFilter})`}
+        </h2>
+        {monthFilter !== 'All' && dailySalesData.length > 0 ? (
+          <DailySalesChart data={dailySalesData} />
+        ) : (
+          <div className="flex items-center justify-center h-80 text-slate-400">
+            <p>{monthFilter === 'All' ? 'Selecione um mês para ver o desempenho diário.' : 'Nenhum dado de venda para este mês.'}</p>
+          </div>
+        )}
       </div>
       
       <SellerPerformance data={sellerSalesData} />
