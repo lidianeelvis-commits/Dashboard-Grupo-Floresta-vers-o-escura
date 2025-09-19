@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, LabelList } from 'recharts';
-import { type MonthlySale } from '../types';
+import { type MonthlySale } from '../types.ts';
 
 interface MonthlySalesChartProps {
   data: MonthlySale[];

@@ -1,5 +1,5 @@
 
-import { type SalesData, type SellerSale } from './types';
+import { type SalesData, type SellerSale } from './types.ts';
 
 export const SALES_DATA: SalesData = {
   monthlySales: [

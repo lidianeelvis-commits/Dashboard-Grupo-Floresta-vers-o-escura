@@ -1,8 +1,9 @@
+
 import React, { useState, useMemo } from 'react';
-import KpiCard from './KpiCard';
-import MonthlySalesChart from './MonthlySalesChart';
-import GoalProgressChart from './GoalProgressChart';
-import DailySalesChart from './DailySalesChart'; // Import the new component
+import KpiCard from './KpiCard.tsx';
+import MonthlySalesChart from './MonthlySalesChart.tsx';
+import GoalProgressChart from './GoalProgressChart.tsx';
+import DailySalesChart from './DailySalesChart.tsx'; // Import the new component
 import { 
   DollarSignIcon, 
   TargetIcon, 
@@ -13,8 +14,8 @@ import {
   ArrowDownIcon,
   TrophyIcon,
   CalendarDaysIcon, // Import the new icon
-} from './icons';
-import { type SellerSale, type SalesData, type Month } from '../types';
+} from './icons.tsx';
+import { type SellerSale, type SalesData, type Month } from '../types.ts';
 
 const formatCurrency = (value: number): string => {
   return value.toLocaleString('pt-BR', {

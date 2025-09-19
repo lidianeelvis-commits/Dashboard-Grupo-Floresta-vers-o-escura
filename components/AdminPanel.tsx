@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo } from 'react';
-import { type SellerSale, type Month, type StoreType } from '../types';
-import { SearchIcon, UserPlusIcon, TrashIcon } from './icons';
+import { type SellerSale, type Month, type StoreType } from '../types.ts';
+import { SearchIcon, UserPlusIcon, TrashIcon } from './icons.tsx';
 
 interface AdminPanelProps {
   onAddSale: (sale: Omit<SellerSale, 'id'>) => void;

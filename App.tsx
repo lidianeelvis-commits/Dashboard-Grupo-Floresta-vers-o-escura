@@ -1,11 +1,11 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import Dashboard from './components/Dashboard';
-import AdminPanel from './components/AdminPanel';
-import LoginModal from './components/LoginModal';
-import { SALES_DATA, SELLER_SALES_DATA, ADMIN_PASSWORD } from './constants';
-import { type SalesData, type SellerSale, type MonthlySale } from './types';
-import { LockIcon, LogOutIcon, ArrowLeftIcon, PrinterIcon } from './components/icons';
+import Dashboard from './components/Dashboard.tsx';
+import AdminPanel from './components/AdminPanel.tsx';
+import LoginModal from './components/LoginModal.tsx';
+import { SALES_DATA, SELLER_SALES_DATA, ADMIN_PASSWORD } from './constants.ts';
+import { type SalesData, type SellerSale, type MonthlySale } from './types.ts';
+import { LockIcon, LogOutIcon, ArrowLeftIcon, PrinterIcon } from './components/icons.tsx';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
