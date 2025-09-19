@@ -14,6 +14,7 @@ export type StoreType = 'ATACADO' | 'INDUSTRIA';
 export type Month = 'Jan' | 'Fev' | 'Mar' | 'Abr' | 'Mai' | 'Jun' | 'Jul' | 'Agos' | 'Set' | 'Out' | 'Nov' | 'Dez';
 
 export interface SellerSale {
+  id: string;
   name: string;
   day: number;
   month: Month;

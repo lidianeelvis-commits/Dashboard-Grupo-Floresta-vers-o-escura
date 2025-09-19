@@ -61,8 +61,16 @@ const App: React.FC = () => {
     setView('dashboard');
   };
 
-  const handleAddSale = (newSale: SellerSale) => {
-    setSellerSalesData(prevData => [...prevData, newSale]);
+  const handleAddSale = (newSaleData: Omit<SellerSale, 'id'>) => {
+    const newSaleWithId: SellerSale = {
+      ...newSaleData,
+      id: crypto.randomUUID(),
+    };
+    setSellerSalesData(prevData => [...prevData, newSaleWithId]);
+  };
+
+  const handleDeleteSale = (saleId: string) => {
+    setSellerSalesData(prevData => prevData.filter(sale => sale.id !== saleId));
   };
   
   const renderHeaderControls = () => {
@@ -144,7 +152,7 @@ const App: React.FC = () => {
         </header>
 
         {view === 'dashboard' && <Dashboard salesData={salesData} sellerSalesData={sellerSalesData} />}
-        {view === 'admin' && isLoggedIn && <AdminPanel onAddSale={handleAddSale} existingData={sellerSalesData} />}
+        {view === 'admin' && isLoggedIn && <AdminPanel onAddSale={handleAddSale} existingData={sellerSalesData} onDeleteSale={handleDeleteSale} />}
         
         {showLoginModal && <LoginModal onLogin={handleLogin} onClose={() => setShowLoginModal(false)} />}
       </div>
