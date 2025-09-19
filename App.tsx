@@ -23,11 +23,27 @@ const App: React.FC = () => {
     }
   });
 
+  const [sellers, setSellers] = useState<string[]>(() => {
+    try {
+      const savedSellers = localStorage.getItem('sellers');
+      // If sellers are in local storage, use them, otherwise derive from initial data
+      return savedSellers ? JSON.parse(savedSellers) : [...new Set(SELLER_SALES_DATA.map(s => s.name))].sort();
+    } catch (error) {
+      console.error("Failed to parse sellers from localStorage", error);
+      return [...new Set(SELLER_SALES_DATA.map(s => s.name))].sort();
+    }
+  });
+
+
   // Persist state to localStorage on change
   useEffect(() => {
     localStorage.setItem('sellerSalesData', JSON.stringify(sellerSalesData));
   }, [sellerSalesData]);
   
+  useEffect(() => {
+    localStorage.setItem('sellers', JSON.stringify(sellers));
+  }, [sellers]);
+
   const salesData: SalesData = useMemo(() => {
     const monthlySalesMap = sellerSalesData.reduce<Record<string, number>>((acc, sale) => {
       acc[sale.month] = (acc[sale.month] || 0) + sale.value;
@@ -71,6 +87,24 @@ const App: React.FC = () => {
 
   const handleDeleteSale = (saleId: string) => {
     setSellerSalesData(prevData => prevData.filter(sale => sale.id !== saleId));
+  };
+
+  const handleAddSeller = (sellerName: string): boolean => {
+    const trimmedName = sellerName.trim();
+    if (!trimmedName || sellers.find(s => s.toLowerCase() === trimmedName.toLowerCase())) {
+      return false; // Don't add if empty or duplicate (case-insensitive)
+    }
+    const newSellers = [...sellers, trimmedName].sort();
+    setSellers(newSellers);
+    return true;
+  };
+
+  const handleDeleteSeller = (sellerName: string) => {
+    // Remove the seller from the sellers list
+    setSellers(prevSellers => prevSellers.filter(s => s !== sellerName));
+
+    // IMPORTANT: Also remove all sales associated with that seller
+    setSellerSalesData(prevData => prevData.filter(sale => sale.name !== sellerName));
   };
   
   const renderHeaderControls = () => {
@@ -133,6 +167,7 @@ const App: React.FC = () => {
            <div>
              <h1 className="text-3xl font-bold text-white">Dashboard de Vendas</h1>
              {view === 'dashboard' && <p className="text-lg text-slate-400">Resumo de performance de Janeiro a Dezembro.</p>}
+             {view === 'admin' && <p className="text-lg text-slate-400">Painel de Gerenciamento de Dados.</p>}
            </div>
            <div className="flex items-center gap-4">
             {view === 'dashboard' && (
@@ -152,7 +187,16 @@ const App: React.FC = () => {
         </header>
 
         {view === 'dashboard' && <Dashboard salesData={salesData} sellerSalesData={sellerSalesData} />}
-        {view === 'admin' && isLoggedIn && <AdminPanel onAddSale={handleAddSale} existingData={sellerSalesData} onDeleteSale={handleDeleteSale} />}
+        {view === 'admin' && isLoggedIn && (
+          <AdminPanel 
+            onAddSale={handleAddSale} 
+            existingData={sellerSalesData} 
+            onDeleteSale={handleDeleteSale}
+            sellers={sellers}
+            onAddSeller={handleAddSeller}
+            onDeleteSeller={handleDeleteSeller}
+          />
+        )}
         
         {showLoginModal && <LoginModal onLogin={handleLogin} onClose={() => setShowLoginModal(false)} />}
       </div>
