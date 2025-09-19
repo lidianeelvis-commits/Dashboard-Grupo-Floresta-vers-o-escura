@@ -43,8 +43,10 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 const MonthlySalesChart: React.FC<MonthlySalesChartProps> = ({ data, selectedMonth }) => {
   const revenues = data.map(d => d.revenue);
-  const maxRevenue = Math.max(...revenues);
-  const minRevenue = Math.min(...revenues);
+  const positiveRevenues = revenues.filter(r => r > 0);
+
+  const maxRevenue = revenues.length > 0 ? Math.max(...revenues) : 0;
+  const minPositiveRevenue = positiveRevenues.length > 0 ? Math.min(...positiveRevenues) : null;
 
   const BEST_MONTH_COLOR = "#10b981"; // green-500
   const WORST_MONTH_COLOR = "#ef4444"; // red-500
@@ -74,9 +76,9 @@ const MonthlySalesChart: React.FC<MonthlySalesChartProps> = ({ data, selectedMon
                 let color = DEFAULT_COLOR;
                 if (entry.month === selectedMonth) {
                   color = SELECTED_MONTH_COLOR;
-                } else if (entry.revenue === maxRevenue) {
+                } else if (maxRevenue > 0 && entry.revenue === maxRevenue) {
                   color = BEST_MONTH_COLOR;
-                } else if (entry.revenue === minRevenue) {
+                } else if (minPositiveRevenue !== null && entry.revenue === minPositiveRevenue) {
                   color = WORST_MONTH_COLOR;
                 }
                 return <Cell key={`cell-${index}`} fill={color} />;
