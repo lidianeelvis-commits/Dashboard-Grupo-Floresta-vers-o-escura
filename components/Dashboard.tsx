@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import KpiCard from './KpiCard';
 import MonthlySalesChart from './MonthlySalesChart';
@@ -22,6 +21,21 @@ const formatCurrency = (value: number): string => {
     style: 'currency',
     currency: 'BRL',
   });
+};
+
+const monthDisplayNames: { [key in Month]: string } = {
+  Jan: 'Janeiro',
+  Fev: 'Fevereiro',
+  Mar: 'Março',
+  Abr: 'Abril',
+  Mai: 'Maio',
+  Jun: 'Junho',
+  Jul: 'Julho',
+  Agos: 'Agosto',
+  Set: 'Setembro',
+  Out: 'Outubro',
+  Nov: 'Novembro',
+  Dez: 'Dezembro',
 };
 
 // --- SellerPerformance Component ---
@@ -137,7 +151,7 @@ const SellerPerformance: React.FC<SellerPerformanceProps> = ({ data }) => {
           className="bg-slate-700 border border-slate-600 rounded-md py-2 px-4 text-white focus:ring-cyan-500 focus:border-cyan-500"
           aria-label="Filtrar por mês"
         >
-          {months.map(month => <option key={month} value={month}>{month === 'All' ? 'Todos os Meses' : month}</option>)}
+          {months.map(month => <option key={month} value={month}>{month === 'All' ? 'Todos os Meses' : monthDisplayNames[month as Month]}</option>)}
         </select>
         <select
           value={storeFilter}
@@ -311,7 +325,7 @@ const Dashboard: React.FC<DashboardProps> = ({ salesData, sellerSalesData }) => 
                 className="bg-slate-700 border border-slate-600 rounded-md py-2 px-3 text-white focus:ring-cyan-500 focus:border-cyan-500 text-sm"
                 aria-label="Filtrar faturamento por mês"
                 >
-                {allMonths.map(month => <option key={month} value={month}>{month === 'All' ? 'Todos os Meses' : month}</option>)}
+                {allMonths.map(month => <option key={month} value={month}>{month === 'All' ? 'Todos os Meses' : monthDisplayNames[month as Month]}</option>)}
             </select>
         </div>
       </div>
@@ -354,7 +368,7 @@ const Dashboard: React.FC<DashboardProps> = ({ salesData, sellerSalesData }) => 
       <div className="bg-slate-800 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-700">
         <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
             <CalendarDaysIcon className="w-6 h-6 text-slate-400" />
-            Desempenho Diário de Vendas {monthFilter !== 'All' && `(${monthFilter})`}
+            Desempenho Diário de Vendas {monthFilter !== 'All' && `(${monthDisplayNames[monthFilter as Month]})`}
         </h2>
         {monthFilter !== 'All' && dailySalesData.length > 0 ? (
           <DailySalesChart data={dailySalesData} />
